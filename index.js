@@ -63,12 +63,3 @@ app.get('/api/:website', async(req, res) => {
 app.listen(PORT, () => {
   console.log(`Server is listening on port ${PORT}`);
 });
-
-// (async()=> {
-//   axios.get(url)
-//   .then(async(response) => getBeerList(response))
-//   .then(list => console.log(list))
-//   .catch(error => {
-//     console.log(error);
-//   });
-// })();
