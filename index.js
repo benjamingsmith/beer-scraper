@@ -2,8 +2,6 @@ const axios = require('axios');
 const cheerio = require('cheerio');
 const express = require('express');
 
-const foUrl = 'https://fathersoffice.com/menus/santa-monica/';
-
 const app = express();
 const PORT = process.env.PORT || 3000;
 
@@ -48,8 +46,9 @@ app.get('/api/:website', async(req, res) => {
   const { website } = req.params;
   switch (website) {
     case 'fo':
+      const url = 'https://fathersoffice.com/menus/santa-monica/';
       try {
-        axios.get(foUrl)
+        axios.get(url)
         .then(async(response) => getFoList(response))
         .then(list => res.send(list))
       } catch(err) {
