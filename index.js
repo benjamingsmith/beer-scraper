@@ -62,7 +62,8 @@ const getMonkish = async (response) => {
     const text = $(element).text();
     if(text === 'BEER MENU || ENJOY HERE' || text === 'BEER MENU || ENJOY AWAY') {
       const location = text.includes('HERE') ? 'here' : 'away';
-      const beerList = element.parent.parent.nextSibling;
+      const beerList = element.parent.parent.parent.nextSibling;
+      
 
       beerList.children[0].children.forEach(async(c, i) => {
         let beerType, beerName, beerDescription;
