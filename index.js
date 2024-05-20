@@ -60,10 +60,9 @@ const getMonkish = async (response) => {
 
   pageH2s.each((index, element) => {
     const text = $(element).text();
-    if(text === 'BEER MENU || ENJOY HERE' || text === 'BEER MENU || ENJOY AWAY') {
+    if(text === ' MENU || ENJOY HERE' || text === ' MENU || ENJOY AWAY') {
       const location = text.includes('HERE') ? 'here' : 'away';
-      const beerList = element.parent.parent.parent.nextSibling;
-      
+      const beerList = text.includes('HERE') ? element.parent.parent.parent.nextSibling : element.parent.parent.parent.nextSibling.nextSibling;
 
       beerList.children[0].children.forEach(async(c, i) => {
         let beerType, beerName, beerDescription;
@@ -102,9 +101,9 @@ app.get('/api/:website', async(req, res) => {
     case 'monkish':
       url = 'https://www.monkishbrewing.com/tastingroom';
       try {
-        axios.get(url)
-        .then(async(response) => getMonkish(response))
-        .then(list => res.send(list))
+        const list = await axios.get(url);
+        const beerList = await getMonkish(list);
+        res.send(beerList);
       } catch(err) {
         console.log(err)
         res.sendStatus(500); // Internal Server Error
