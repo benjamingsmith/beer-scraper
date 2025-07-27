@@ -1,13 +1,11 @@
 const express = require('express');
-const { getFathersOffice } = require('./components/FathersOffice');
-const { getMonkish } = require('./components/Monkish');
+const { getFathersOffice, getMonkish } = require('./locations');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
 app.get('/api/:website', async(req, res) => {
   const { website } = req.params;
-  let url;
   switch (website) {
     case 'fo':
       try {
