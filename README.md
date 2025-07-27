@@ -37,10 +37,9 @@ npm start
 The API will be available at `http://localhost:3000`
 
 ## 📋 API Endpoints
-`/api/fo`
-`/api/monkish`
 
 ### Father's Office
+`/api/fo`
 **Example Response:**
 ```json
 [
@@ -58,6 +57,7 @@ The API will be available at `http://localhost:3000`
 ```
 
 ### Monkish
+`/api/monkish`
 **Example Response:**
 ```json
 {
