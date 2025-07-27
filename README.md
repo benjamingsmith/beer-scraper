@@ -58,7 +58,7 @@ The API will be available at `http://localhost:3000`
 
 ### Monkish
 `/api/monkish`<br />
-****Example Response:***
+***Example Response:***
 ```json
 {
   "here": {
