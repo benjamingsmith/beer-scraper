@@ -39,7 +39,7 @@ The API will be available at `http://localhost:3000`
 ## 📋 API Endpoints
 
 ### Father's Office
-`/api/fo`
+`/api/fo`<br />
 **Example Response:**
 ```json
 [
@@ -57,7 +57,7 @@ The API will be available at `http://localhost:3000`
 ```
 
 ### Monkish
-`/api/monkish`
+`/api/monkish`<br />
 **Example Response:**
 ```json
 {
