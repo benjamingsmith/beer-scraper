@@ -75,9 +75,9 @@ The API will be available at `http://localhost:3000`
     "title": "To Go",
     "list": [
       {
-        "type": "Stout",
-        "name": "Stay Vigilant",
-        "description": "Imperial stout with coffee notes"
+        "type": "Hoppy",
+        "name": "DDH Island",
+        "description": "Double Dry Hopped Pale Ale w/ Citra • 6.5% ABV"
       }
     ]
   }
