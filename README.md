@@ -1,6 +1,6 @@
 # 🍺 Beer Scraper API
 
-A Node.js API that scrapes and provides real-time beer menu information from popular craft breweries in Los Angeles.
+A Node.js API that scrapes and provides real-time taproom lists from popular craft beer venues in Los Angeles.
 
 ![Chat Application](https://img.shields.io/badge/status-active-success.svg)
 ![Node.js](https://img.shields.io/badge/node-%3E%3D14.0.0-brightgreen.svg)
@@ -109,6 +109,15 @@ To modify or add new brewery scrapers:
 2. Implement the scraping logic using Axios and Cheerio
 3. Add the new route to `index.js`
 4. Export your scraper function for use in the main application
+
+## 📝 Future Enhancements
+
+- [ ] El Segundo Brewing Company
+- [ ] Highland Park Brewery
+- [ ] Santa Monica Brew Works
+- [ ] Everywhere Beer
+- [ ] Far Field Beer Company
+
 
 ## 📝 License
 
