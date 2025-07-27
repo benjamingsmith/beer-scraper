@@ -9,7 +9,7 @@ A Node.js API that scrapes and provides real-time taproom lists from popular cra
 
 This API scrapes beer menus from:
 - **Father's Office** (Santa Monica location)
-- **Monkish Brewing** (Tasting room)
+- **Monkish Brewing Co.** (Torrance location)
 
 The scraper extracts structured data including beer types, names, and descriptions, making it easy to programmatically access current beer availability.
 
@@ -112,11 +112,13 @@ To modify or add new brewery scrapers:
 
 ## 📝 Future Enhancements
 
+- [ ] Untappd Ratings
 - [ ] El Segundo Brewing Company
 - [ ] Highland Park Brewery
 - [ ] Santa Monica Brew Works
 - [ ] Everywhere Beer
 - [ ] Far Field Beer Company
+- [ ] Bottle Logic Brewing
 
 
 ## 📝 License
