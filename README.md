@@ -2,6 +2,9 @@
 
 A Node.js API that scrapes and provides real-time beer menu information from popular craft breweries in Los Angeles.
 
+![Chat Application](https://img.shields.io/badge/status-active-success.svg)
+![Node.js](https://img.shields.io/badge/node-%3E%3D14.0.0-brightgreen.svg)
+
 ## 🎯 Overview
 
 This API scrapes beer menus from:
