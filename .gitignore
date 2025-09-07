@@ -5,7 +5,3 @@ package-lock.json
 
 # misc
 .DS_Store
-
-README_DATABASE.md
-HEROKU_DEPLOYMENT.md
-crontab-setup.txt
