@@ -1,0 +1,86 @@
+const mongoose = require('mongoose');
+
+const beerSchema = new mongoose.Schema({
+  name: {
+    type: String,
+    required: true,
+    trim: true,
+    index: true
+  },
+  normalizedName: {
+    type: String,
+    required: true,
+    trim: true,
+    lowercase: true,
+    index: true
+  },
+  type: {
+    type: String,
+    required: true,
+    trim: true
+  },
+  description: {
+    type: String,
+    trim: true
+  },
+  rating: {
+    type: Number,
+    min: 0,
+    max: 5
+  },
+  location: {
+    type: String,
+    required: true,
+    enum: ['fathers-office', 'monkish'],
+    index: true
+  },
+  scrapedAt: {
+    type: Date,
+    required: true,
+    default: Date.now,
+    index: true
+  }
+}, {
+  timestamps: true
+});
+
+// Create compound indexes for efficient queries
+beerSchema.index({ location: 1, scrapedAt: -1 });
+beerSchema.index({ normalizedName: 1, location: 1, scrapedAt: -1 });
+beerSchema.index({ scrapedAt: -1 });
+
+// Pre-save middleware to normalize beer name
+beerSchema.pre('save', function(next) {
+  if (this.name) {
+    this.normalizedName = this.name.toLowerCase().trim();
+  }
+  next();
+});
+
+// Static method to get all beers from a specific location
+beerSchema.statics.getByLocation = function(location) {
+  return this.find({ location }).sort({ scrapedAt: -1 });
+};
+
+// Static method to get beer history by name
+beerSchema.statics.getBeerHistory = function(beerName) {
+  const normalizedName = beerName.toLowerCase().trim();
+  return this.find({ normalizedName }).sort({ scrapedAt: -1 });
+};
+
+// Static method to get recent beers across all locations
+beerSchema.statics.getRecentBeers = function(limit = 100) {
+  return this.find({}).sort({ scrapedAt: -1 }).limit(limit);
+};
+
+// Static method to add beer entry
+beerSchema.statics.addBeer = function(beerData) {
+  const beer = new this({
+    ...beerData,
+    normalizedName: beerData.name.toLowerCase().trim(),
+    scrapedAt: new Date()
+  });
+  return beer.save();
+};
+
+module.exports = mongoose.model('Beers', beerSchema, 'beer_list');
