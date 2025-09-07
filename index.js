@@ -17,35 +17,36 @@ mongoose.connect(MONGODB_URI)
   .then(() => console.log('Connected to MongoDB'))
   .catch(err => console.error('MongoDB connection error:', err));
 
-app.get('/api/:website', async(req, res) => {
-  const { website } = req.params;
+
+
+app.get('/api/:location', async(req, res) => {
+  const { location } = req.params;
   
   try {
-    let beerList;
-    
-    let locationFilter;
-    switch (website) {
-      case 'fo':
-        locationFilter = 'fathers-office';
-        break;
-      case 'monkish':
-        locationFilter = 'monkish';
-        break;
-      default:
-        return res.sendStatus(404); // Not Found
+    if (location === 'all') {
+      const beerList = await Beer.getRecentBeers();
+      const formattedList = beerList.map(beer => ({
+        type: beer.type,
+        name: beer.name,
+        description: beer.description,
+        rating: beer.rating
+      }));
+      res.json(formattedList);
     }
+    else {
+      let beerList;
+      beerList = await Beer.getByLocation(location);
     
-    beerList = await Beer.getByLocation(locationFilter);
+      // Transform database results to match API format
+      const formattedList = beerList.map(beer => ({
+        type: beer.type,
+        name: beer.name,
+        description: beer.description,
+        rating: beer.rating
+      }));
     
-    // Transform database results to match API format
-    const formattedList = beerList.map(beer => ({
-      type: beer.type,
-      name: beer.name,
-      description: beer.description,
-      rating: beer.rating
-    }));
-    
-    res.json(formattedList);
+      res.json(formattedList);
+    }
   } catch(err) {
     console.error('Database error:', err);
     res.sendStatus(500); // Internal Server Error
