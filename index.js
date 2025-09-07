@@ -1,9 +1,11 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const Beer = require('./models/Beer');
-const dotenv = require('dotenv');
 
-dotenv.config();
+if (process.env.NODE_ENV !== 'production') {
+  // Only needed locally; Heroku uses config vars
+  require('dotenv').config();
+}
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -50,6 +52,6 @@ app.get('/api/:website', async(req, res) => {
   }
 });
 
-app.listen(PORT, () => {
+app.listen(PORT, '0.0.0.0', () => {
   console.log(`Server is listening on port ${PORT}`);
 });
