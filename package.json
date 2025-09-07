@@ -1,17 +1,17 @@
 {
-  "name":"beer-scraper",
-  "version":"1.0.0",
-  "author":"Benjamin Smith <hello@benjamingsmith.com>",
-  "license":"MIT",
-  "dependencies":{
-      "axios":"^1.3.4",
-      "cheerio":"^1.0.0-rc.12",
-      "express":"^4.18.2",
-      "mongoose":"^8.18.0"
-    },
-    "scripts":{
-      "start":"node index.js",
-      "update-beers":"node scripts/updateBeers.js",
-      "update-ratings":"node scripts/update-ratings-cron.js"
-    }
+  "name": "beer-scraper",
+  "version": "1.0.0",
+  "author": "Benjamin Smith <hello@benjamingsmith.com>",
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^1.3.4",
+    "cheerio": "^1.0.0-rc.12",
+    "dotenv": "^17.2.2",
+    "express": "^4.18.2",
+    "mongoose": "^8.18.0"
+  },
+  "scripts": {
+    "start": "node index.js",
+    "update-beers": "node scripts/updateBeers.js"
+  }
 }
