@@ -21,35 +21,32 @@ mongoose.connect(MONGODB_URI)
 
 app.get('/api/:location', async(req, res) => {
   const { location } = req.params;
+  const { sortBy } = req.query;
   
   try {
-    if (location === 'all') {
-      const beerList = await Beer.getRecentBeers();
-      const formattedList = beerList.map(beer => ({
-        type: beer.type,
-        name: beer.name,
-        description: beer.description,
-        rating: beer.rating
-      }));
-      res.json(formattedList);
-    }
-    else {
-      let beerList;
-      beerList = await Beer.getByLocation(location);
+    const beerList = location === 'all' 
+      ? await Beer.getRecentBeers()
+      : await Beer.getByLocation(location);
     
-      // Transform database results to match API format
-      const formattedList = beerList.map(beer => ({
-        type: beer.type,
-        name: beer.name,
-        description: beer.description,
-        rating: beer.rating
-      }));
+    const formattedList = beerList.map(beer => ({
+      type: beer.type,
+      name: beer.name,
+      description: beer.description,
+      rating: beer.rating
+    }));
     
-      res.json(formattedList);
+    if (sortBy === 'rating') {
+      formattedList.sort((a, b) => b.rating - a.rating);
+    } else if (sortBy === 'name') {
+      formattedList.sort((a, b) => a.name.localeCompare(b.name));
+    } else if (sortBy === 'type') {
+      formattedList.sort((a, b) => a.type.localeCompare(b.type));
     }
+    
+    res.json(formattedList);
   } catch(err) {
     console.error('Database error:', err);
-    res.sendStatus(500); // Internal Server Error
+    res.sendStatus(500);
   }
 });
 
