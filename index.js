@@ -17,21 +17,27 @@ mongoose.connect(MONGODB_URI)
   .then(() => console.log('Connected to MongoDB'))
   .catch(err => console.error('MongoDB connection error:', err));
 
-
-
 app.get('/api/:location', async(req, res) => {
   const { location } = req.params;
   const { sortBy } = req.query;
   
   try {
-    const beerList = location === 'all' 
-      ? await Beer.getRecentBeers()
-      : await Beer.getByLocation(location);
+    switch (location) {
+      case 'all':
+        beerList = await Beer.getAllBeers();
+        break;
+      case 'on-tap':
+        beerList = await Beer.getRecentBeers();
+        break;
+      default:
+        beerList = await Beer.getByLocation(location);
+    }
     
     const formattedList = beerList.map(beer => ({
       type: beer.type,
       name: beer.name,
       description: beer.description,
+      location: location === 'all' || location === 'on-tap' ? beer.location : undefined,
       rating: beer.rating
     }));
     

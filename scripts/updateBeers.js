@@ -23,17 +23,39 @@ async function updateFathersOfficeBeers() {
     console.log('Scraping Fathers Office...');
     const beers = await getFathersOffice();
     
-    // Clear existing data for this location
-    await Beers.deleteMany({ location: 'fathers-office' });
-    console.log('Cleared existing Fathers Office data');
+    // Mark all existing beers as off tap
+    await Beers.updateMany({ location: 'fathers-office' }, { onTap: false });
+    console.log('Marked existing Fathers Office beers as off tap');
     
-    // Save new data
+    // Save new data or update existing beers to onTap: true
     for (const beer of beers) {
       if (beer.name && beer.type) {
-        await Beers.addBeer({
-          ...beer,
+        const normalizedName = beer.name.toLowerCase().trim();
+        
+        // Try to find existing beer with same name and location
+        const existingBeer = await Beers.findOne({
+          normalizedName,
           location: 'fathers-office'
         });
+        
+        if (existingBeer) {
+          // Update existing beer to be on tap and refresh data
+          await Beers.updateOne(
+            { _id: existingBeer._id },
+            { 
+              ...beer,
+              onTap: true,
+              scrapedAt: new Date()
+            }
+          );
+        } else {
+          // Add new beer
+          await Beers.addBeer({
+            ...beer,
+            location: 'fathers-office',
+            onTap: true
+          });
+        }
       }
     }
     
@@ -48,14 +70,38 @@ async function updateMonkishBeers() {
     console.log('Scraping Monkish...');
     const beers = await getMonkish();
     
-    // Clear existing data for this location
-    await Beers.deleteMany({ location: 'monkish' });
-    console.log('Cleared existing Monkish data');
+    // Mark all existing beers as off tap
+    await Beers.updateMany({ location: 'monkish' }, { onTap: false });
+    console.log('Marked existing Monkish beers as off tap');
     
-    // Save new data (getMonkish now returns a flat array with location already set)
+    // Save new data or update existing beers to onTap: true (getMonkish returns a flat array with location already set)
     for (const beer of beers) {
       if (beer.name && beer.type) {
-        await Beers.addBeer(beer);
+        const normalizedName = beer.name.toLowerCase().trim();
+        
+        // Try to find existing beer with same name and location
+        const existingBeer = await Beers.findOne({
+          normalizedName,
+          location: 'monkish'
+        });
+        
+        if (existingBeer) {
+          // Update existing beer to be on tap and refresh data
+          await Beers.updateOne(
+            { _id: existingBeer._id },
+            { 
+              ...beer,
+              onTap: true,
+              scrapedAt: new Date()
+            }
+          );
+        } else {
+          // Add new beer
+          await Beers.addBeer({
+            ...beer,
+            onTap: true
+          });
+        }
       }
     }
     

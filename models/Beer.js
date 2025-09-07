@@ -34,6 +34,12 @@ const beerSchema = new mongoose.Schema({
     enum: ['fathers-office', 'monkish'],
     index: true
   },
+  onTap: {
+    type: Boolean,
+    required: true,
+    default: true,
+    index: true
+  },
   scrapedAt: {
     type: Date,
     required: true,
@@ -45,9 +51,9 @@ const beerSchema = new mongoose.Schema({
 });
 
 // Create compound indexes for efficient queries
-beerSchema.index({ location: 1, scrapedAt: -1 });
-beerSchema.index({ normalizedName: 1, location: 1, scrapedAt: -1 });
-beerSchema.index({ scrapedAt: -1 });
+beerSchema.index({ location: 1, onTap: -1, scrapedAt: -1 });
+beerSchema.index({ normalizedName: 1, location: 1, onTap: -1, scrapedAt: -1 });
+beerSchema.index({ onTap: -1, scrapedAt: -1 });
 
 // Pre-save middleware to normalize beer name
 beerSchema.pre('save', function(next) {
@@ -57,9 +63,14 @@ beerSchema.pre('save', function(next) {
   next();
 });
 
-// Static method to get all beers from a specific location
+// Static method to get all beers from a specific location (only on tap)
 beerSchema.statics.getByLocation = function(location) {
-  return this.find({ location }).sort({ scrapedAt: -1 });
+  return this.find({ location, onTap: true }).sort({ scrapedAt: -1 });
+};
+
+// Static method to get all beers from a specific location (including off tap)
+beerSchema.statics.getAllByLocation = function(location) {
+  return this.find({ location }).sort({ onTap: -1, scrapedAt: -1 });
 };
 
 // Static method to get beer history by name
@@ -68,9 +79,14 @@ beerSchema.statics.getBeerHistory = function(beerName) {
   return this.find({ normalizedName }).sort({ scrapedAt: -1 });
 };
 
-// Static method to get recent beers across all locations
+// Static method to get recent beers across all locations (only on tap)
 beerSchema.statics.getRecentBeers = function(limit = 100) {
-  return this.find({}).sort({ scrapedAt: -1 }).limit(limit);
+  return this.find({ onTap: true }).sort({ scrapedAt: -1 }).limit(limit);
+};
+
+// Static method to get all beers across all locations (including off tap)
+beerSchema.statics.getAllBeers = function() {
+  return this.find({}).sort({ onTap: -1, scrapedAt: -1 });
 };
 
 // Static method to add beer entry
@@ -78,6 +94,7 @@ beerSchema.statics.addBeer = function(beerData) {
   const beer = new this({
     ...beerData,
     normalizedName: beerData.name.toLowerCase().trim(),
+    onTap: beerData.onTap !== undefined ? beerData.onTap : true,
     scrapedAt: new Date()
   });
   return beer.save();
