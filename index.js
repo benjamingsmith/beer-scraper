@@ -38,6 +38,7 @@ app.get('/api/:location', async(req, res) => {
       description: beer.description,
       type: beer.type,
       location: location === 'all' || location === 'on-tap' ? beer.location : undefined,
+      onTap: location === 'all' ? beer.onTap : undefined,
       rating: beer.rating
     }));
 

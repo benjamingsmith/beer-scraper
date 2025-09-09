@@ -80,8 +80,10 @@ beerSchema.statics.getBeerHistory = function(beerName) {
 };
 
 // Static method to get all beers across all locations (including off tap)
-beerSchema.statics.getAllBeers = function(onTap = false) {
-  return this.find({ onTap: onTap }).sort({ onTap: -1, scrapedAt: -1 });
+beerSchema.statics.getAllBeers = function(onTap) {
+  // return all beers. If onTap is true, return only on tap beers. If it's not specified, return all beers.
+  const filter = onTap === true ? { onTap: true } : {};
+  return this.find(filter).sort({ scrapedAt: -1 });
 };
 
 // Static method to add beer entry
