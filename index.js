@@ -27,16 +27,16 @@ app.get('/api/:location', async(req, res) => {
         beerList = await Beer.getAllBeers();
         break;
       case 'on-tap':
-        beerList = await Beer.getRecentBeers();
+        beerList = await Beer.getAllBeers(true);
         break;
       default:
         beerList = await Beer.getByLocation(location);
     }
     
     const formattedList = beerList.map(beer => ({
-      type: beer.type,
       name: beer.name,
       description: beer.description,
+      type: beer.type,
       location: location === 'all' || location === 'on-tap' ? beer.location : undefined,
       rating: beer.rating
     }));
@@ -47,6 +47,8 @@ app.get('/api/:location', async(req, res) => {
       formattedList.sort((a, b) => a.name.localeCompare(b.name));
     } else if (sortBy === 'type') {
       formattedList.sort((a, b) => a.type.localeCompare(b.type));
+    } else if (sortBy === 'location') {
+      formattedList.sort((a, b) => a.location.localeCompare(b.location));
     }
     
     res.json(formattedList);
