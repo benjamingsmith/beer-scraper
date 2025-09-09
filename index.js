@@ -40,15 +40,23 @@ app.get('/api/:location', async(req, res) => {
       location: location === 'all' || location === 'on-tap' ? beer.location : undefined,
       rating: beer.rating
     }));
-    
-    if (sortBy === 'rating') {
-      formattedList.sort((a, b) => b.rating - a.rating);
-    } else if (sortBy === 'name') {
-      formattedList.sort((a, b) => a.name.localeCompare(b.name));
-    } else if (sortBy === 'type') {
-      formattedList.sort((a, b) => a.type.localeCompare(b.type));
-    } else if (sortBy === 'location') {
-      formattedList.sort((a, b) => a.location.localeCompare(b.location));
+
+    switch(sortBy) {
+      case 'rating':
+        formattedList.sort((a, b) => b.rating - a.rating);
+        break;
+      case 'name':
+        formattedList.sort((a, b) => a.name.localeCompare(b.name));
+        break;
+      case 'type':
+        formattedList.sort((a, b) => a.type.localeCompare(b.type));
+        break;
+      case 'location':
+        formattedList.sort((a, b) => a.location.localeCompare(b.location));
+        break;
+      default:
+        formattedList.sort((a, b) => a.name.localeCompare(b.name));
+        break;
     }
     
     res.json(formattedList);
