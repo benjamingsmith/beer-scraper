@@ -1,6 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const Beer = require('./models/Beer');
+const { getElSegundo } = require('./locations/ElSegundo');
 
 if (process.env.NODE_ENV !== 'production') {
   // Only needed locally; Heroku uses config vars
@@ -39,7 +40,7 @@ app.get('/api/:location', async(req, res) => {
     const formattedList = beerList.map(beer => ({
       name: beer.name,
       description: beer.description,
-      type: beer.type,
+      type: beer.type || undefined,
       location: location === 'all' || location === 'on-tap' ? beer.location : undefined,
       onTap: location === 'all' ? beer.onTap : undefined,
       rating: beer.rating
