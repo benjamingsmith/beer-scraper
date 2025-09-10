@@ -57,8 +57,16 @@
             padding: 0.5rem 1rem;
             border: 2px solid #ddd;
             border-radius: 5px;
-            font-size: 1rem;
+            font-size: .8rem;
             background: white;
+        }
+        select {
+            margin-right: 0.5rem;
+        }
+        @media (max-width: 768px) {
+            select {
+                margin-right: 0;
+            }
         }
         button {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -70,6 +78,11 @@
         button:hover {
             transition: all 0.2s ease-in-out;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        button#updateButton {
+            @media (max-width: 768px) {
+                margin-top: 1rem;
+            }
         }
         .stats {
             background: white;
@@ -203,7 +216,7 @@
     </div>
 
     <div class="controls">
-        <h3>Filter & Sort</h3>
+        <!-- <h3>Filter & Sort</h3> -->
         <div class="filter-group">
             <label for="location">Location:</label>
             <select id="location">
@@ -221,7 +234,7 @@
                 <option value="location">Location</option>
             </select>
             
-            <button onclick="loadBeers()">Update View</button>
+            <button id="updateButton" onclick="loadBeers()">Update View</button>
         </div>
     </div>
 
