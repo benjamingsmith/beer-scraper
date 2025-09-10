@@ -1,8 +1,7 @@
 const axios = require('axios');
 const cheerio = require('cheerio');
-const { getUntappdRating } = require('../utils/untappd');
 
-const getElSegundo = async (skipRatings = false) => {
+const getElSegundo = async () => {
   const url = 'https://www.elsegundobrewing.com/visit/';
   const $ = cheerio.load((await axios.get(url)).data);
   const beerList = [];
@@ -16,7 +15,7 @@ const getElSegundo = async (skipRatings = false) => {
 
     if (beerName && element.children.length > 1) {
       beerList.push({
-        type: null,
+        type: undefined,
         name: beerName,
         description: beerDescription,
         rating: null,
@@ -25,17 +24,6 @@ const getElSegundo = async (skipRatings = false) => {
     }
   });
 
-  // Second pass: fetch ratings with rate limiting (only if not skipped)
-  if (!skipRatings) {
-    console.log(`Fetching ratings for ${beerList.length} beers from El Segundo...`);
-    
-    for (let i = 0; i < beerList.length; i++) {
-      if (beerList[i].name) {
-        console.log(`Getting rating for "${beerList[i].name}" (${i + 1}/${beerList.length})`);
-        beerList[i].rating = await getUntappdRating(beerList[i].name);
-      }
-    }
-  }
   
   return beerList;
 };

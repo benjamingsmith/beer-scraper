@@ -23,7 +23,7 @@ async function connectToDatabase() {
 async function updateLocationBeers(scraperFunction, locationName, displayName) {
   try {
     console.log(`Scraping ${displayName}...`);
-    const beers = await scraperFunction(true); // Skip ratings in scraper
+    const beers = await scraperFunction(); // Scraper no longer handles ratings
     
     // Mark all existing beers as off tap
     await Beers.updateMany({ location: locationName }, { onTap: false });
@@ -33,7 +33,7 @@ async function updateLocationBeers(scraperFunction, locationName, displayName) {
     
     // Save new data or update existing beers to onTap: true
     for (const beer of beers) {
-      if (beer.name && beer.type) {
+      if (beer.name) {
         const normalizedName = beer.name.toLowerCase().trim();
         
         // Try to find existing beer with same name and location
@@ -83,8 +83,6 @@ async function updateLocationBeers(scraperFunction, locationName, displayName) {
     console.error(`Error updating ${displayName} beers:`, error);
   }
 }
-
-
 
 async function updateAllBeers() {
   console.log('Starting beer data update...');
