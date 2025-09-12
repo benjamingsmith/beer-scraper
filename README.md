@@ -44,22 +44,6 @@ The API will be available at `http://localhost:3000`
 ### Father's Office
 `/api/fo`<br />
 ***Example Response:***
-```json
-[
-  {
-    "type": "Hoppy - Ales",
-    "name": "Pliny the Elder",
-    "description": "A beer that needs no introduction"
-  },
-  {
-    "type": "Yeasty/Spicy",
-    "name": "Brouwerij Verhaeghe Duchesse De Bourgogne",
-    "description": "Flemish Red Ale. Sweet, Fruity ale with a Pleasant Sour Finish. (330ml Btl)"
-  },
-]
-```
-
-### Monkish
 `/api/monkish`<br />
 ***Example Response:***
 ```json
