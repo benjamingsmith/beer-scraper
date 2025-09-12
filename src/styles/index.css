@@ -1,15 +1,20 @@
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     margin: 0;
-    padding: 20px;
     background-color: #f5f5f5;
     color: #333;
+}
+
+.App {
+    padding: 0 20px;
 }
 
 .header-container {
     position: fixed;
     width: calc(100% - 40px);
     z-index: 3;
+    margin-top: 20px;
+    transition: margin-top 0.3s ease;
 
     @media (max-width: 768px) {
         width: 100%;
@@ -19,10 +24,10 @@ body {
     &:before {
         content: '';
         position: absolute;
-        top: -100px;
+        top: -50px;
         left: -20px;
         width: 100vw;
-        height: 150px;
+        height: 100px;
         background: #f5f5f5;
         z-index: 0;
     }
@@ -38,6 +43,11 @@ body {
     border-radius: 10px 10px 0 0;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     text-align: center;
+    transition: all 0.3s ease;
+
+    @media (max-width: 768px) {
+        padding: 1rem;
+    }
 
     &::before {
         content: '';
@@ -48,9 +58,13 @@ body {
         height: 100%;
         opacity: 0.5;
         background-image: url('../images/bubble_overlay.png');
-        background-size: contain;
+        background-size: 10%;
         background-position: center;
         z-index: 0;
+
+        @media (max-width: 768px) {
+            background-size: 20%;
+        }
     }
 }
 
@@ -61,6 +75,7 @@ body {
     text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
     z-index: 1;
     position: relative;
+    transition: font-size 0.3s ease, line-height 0.3s ease;
 
     @media (max-width: 768px) {
         font-size: 1.5rem;
@@ -74,9 +89,35 @@ body {
     margin: 0.5rem 0 0 0;
     font-size: 1.1rem;
     opacity: 0.9;
+    transition: font-size 0.3s ease;
 
     @media (max-width: 768px) {
         font-size: .8rem;
+    }
+}
+
+@media (min-width: 769px) {
+    .header-container.scrolled {
+        margin-top: 0;
+        padding-top: 0;
+    }
+
+    .header-container.scrolled .header h1 {
+        font-size: 1.8rem;
+        line-height: 1.7rem;
+    }
+
+    .header-container.scrolled .header p {
+        font-size: 0.9rem;
+    }
+
+    .header-container.scrolled .header {
+        padding: 1rem 2rem;
+        border-radius: 0;
+    }
+
+    .header-container.scrolled .controls {
+        padding: 1rem;
     }
 }
 
@@ -86,6 +127,7 @@ body {
     border-radius: 0 0 10px 10px;
     margin-bottom: 1.5rem;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
 
     @media (max-width: 768px) {
         padding: .8rem;
@@ -113,6 +155,11 @@ body {
     color: #555;
     font-size: 0.9rem;
     margin-bottom: 0.5rem;
+
+    @media (max-width: 768px) {
+        font-size: 0.8rem;
+        margin-bottom: 0;
+    }
 }
 
 .filter-group-item {
@@ -230,17 +277,29 @@ button#updateButton {
     font-weight: bold;
     color: #333;
     margin-bottom: 0.5rem;
+
+    @media (max-width: 768px) {
+        font-size: 1rem;
+    }
 }
 
 .beer-type {
     color: #666;
     font-style: italic;
     margin-bottom: 0.5rem;
+
+    @media (max-width: 768px) {
+        font-size: 0.8rem;
+    }
 }
 
 .beer-description {
     color: #555;
     line-height: 1.5;
+
+    @media (max-width: 768px) {
+        font-size: 0.8rem;
+    }
 }
 
 .beer-meta {
@@ -264,6 +323,10 @@ button#updateButton {
     margin-top: 0.35rem;
     font-size: 0.9rem;
     color: #999;
+
+    @media (max-width: 768px) {
+        font-size: 0.8rem;
+    }
 }
 
 .star {
@@ -271,6 +334,10 @@ button#updateButton {
     color: #ffd700;
     position: relative;
     display: inline-block;
+
+    @media (max-width: 768px) {
+        font-size: 1rem;
+    }
 }
 
 .star.empty {
@@ -284,32 +351,43 @@ button#updateButton {
     background-clip: text;
 }
 
-.location-badge {
-    background: #e8f4f8;
-    color: #2c5282;
+.badge {
     padding: 0.3rem 0.8rem;
     border-radius: 20px;
     font-size: 0.9rem;
     font-weight: 500;
+
+    @media (max-width: 768px) {
+        font-size: 0.8rem;
+    }
+}
+
+.location-badge {
+    background: #e8f4f8;
+    color: #2c5282;
     margin-right: 0.5rem;
+
+    @media (max-width: 768px) {
+        font-size: 0.8rem;
+    }
 }
 
 .on-tap {
     background: #c6f6d5;
     color: #22543d;
-    padding: 0.3rem 0.8rem;
-    border-radius: 20px;
-    font-size: 0.9rem;
-    font-weight: 500;
+
+    @media (max-width: 768px) {
+        font-size: 0.8rem;
+    }
 }
 
 .off-tap {
     background: #fed7d7;
     color: #742a2a;
-    padding: 0.3rem 0.8rem;
-    border-radius: 20px;
-    font-size: 0.9rem;
-    font-weight: 500;
+
+    @media (max-width: 768px) {
+        font-size: 0.8rem;
+    }
 }
 
 .error {

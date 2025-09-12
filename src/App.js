@@ -8,6 +8,7 @@ function App() {
   const [beers, setBeers] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [isScrolled, setIsScrolled] = useState(false);
   const { location, sortBy, updateLocation, updateSortBy } = useUrlParams();
 
   const loadBeers = async () => {
@@ -47,6 +48,17 @@ function App() {
     loadBeers();
   };
 
+  // Handle scroll events
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+      setIsScrolled(scrollTop > 50);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
   // Load beers on component mount and when location/sortBy changes
   useEffect(() => {
     if (location && sortBy) {
@@ -56,7 +68,7 @@ function App() {
 
   return (
     <div className="App">
-      <div className="header-container">
+      <div className={`header-container ${isScrolled ? 'scrolled' : ''}`}>
         <Header location={location}
           sortBy={sortBy}
           onLocationChange={handleLocationChange}

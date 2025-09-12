@@ -30,8 +30,8 @@ const Controls = ({ location, sortBy, onLocationChange, onSortChange }) => {
   const sortOptions = [
     { value: 'name', label: 'Name' },
     { value: 'rating', label: 'Rating' },
-    { value: 'type', label: 'Type' },
-    { value: 'recently-added', label: 'Recently Added' }
+    { value: 'recently-added', label: 'Recently Added' },
+    { value: 'type', label: 'Type' }
   ];
 
   // Show location sort only for "all" and "on-tap"

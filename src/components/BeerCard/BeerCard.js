@@ -19,12 +19,12 @@ const BeerCard = ({ beer }) => {
       <div className="beer-meta">
         <div>
           {beer.location && (
-            <span className="location-badge">
+            <span className="location-badge badge">
               📍 {getLocationDisplayName(beer.location)}
             </span>
           )}
           {beer.onTap !== undefined && (
-            <span className={beer.onTap ? 'on-tap' : 'off-tap'}>
+            <span className={beer.onTap ? 'on-tap badge' : 'off-tap badge'}>
               {beer.onTap ? '🍺 On Tap' : '❌ Off Tap'}
             </span>
           )}
