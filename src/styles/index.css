@@ -1,0 +1,412 @@
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    background-color: #f5f5f5;
+    color: #333;
+}
+
+.App {
+    padding: 0 20px;
+}
+
+.header-container {
+    position: fixed;
+    width: calc(100% - 40px);
+    z-index: 3;
+    margin-top: 20px;
+    transition: margin-top 0.3s ease;
+
+    @media (max-width: 768px) {
+        width: 100%;
+        position: relative;
+    }
+
+    &:before {
+        content: '';
+        position: absolute;
+        top: -50px;
+        left: -20px;
+        width: 100vw;
+        height: 100px;
+        background: #f5f5f5;
+        z-index: 0;
+    }
+}
+
+.header {
+    /* background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); */
+    /* generate me a gradient that would represent all the colors a beer comes in (pilsner to stout */
+    position: relative;
+    background: linear-gradient(#f0c040 0%, #e08000 50%, #b85000 100%);
+    color: white;
+    padding: 2rem;
+    border-radius: 10px 10px 0 0;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    transition: all 0.3s ease;
+
+    @media (max-width: 768px) {
+        padding: 1rem;
+    }
+
+    &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0.5;
+        background-image: url('../images/bubble_overlay.png');
+        background-size: 10%;
+        background-position: center;
+        z-index: 0;
+
+        @media (max-width: 768px) {
+            background-size: 20%;
+        }
+    }
+}
+
+.header h1 {
+    margin: 0;
+    font-size: 2.5rem;
+    line-height: 2.4rem;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    z-index: 1;
+    position: relative;
+    transition: font-size 0.3s ease, line-height 0.3s ease;
+
+    @media (max-width: 768px) {
+        font-size: 1.5rem;
+        line-height: 1.8rem;
+    }
+}
+
+.header p {
+    z-index: 1;
+    position: relative;
+    margin: 0.5rem 0 0 0;
+    font-size: 1.1rem;
+    opacity: 0.9;
+    transition: font-size 0.3s ease;
+
+    @media (max-width: 768px) {
+        font-size: .8rem;
+    }
+}
+
+@media (min-width: 769px) {
+    .header-container.scrolled {
+        margin-top: 0;
+        padding-top: 0;
+    }
+
+    .header-container.scrolled .header h1 {
+        font-size: 1.8rem;
+        line-height: 1.7rem;
+    }
+
+    .header-container.scrolled .header p {
+        font-size: 0.9rem;
+    }
+
+    .header-container.scrolled .header {
+        padding: 1rem 2rem;
+        border-radius: 0;
+    }
+
+    .header-container.scrolled .controls {
+        padding: 1rem;
+    }
+}
+
+.controls {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 0 0 10px 10px;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+
+    @media (max-width: 768px) {
+        padding: .8rem;
+    }
+
+    .location-select {
+        text-transform: capitalize;
+    }
+}
+
+.controls h3 {
+    margin: 0 0 1rem 0;
+    color: #555;
+}
+
+.filter-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .5rem;
+    align-items: center;
+}
+
+.filter-group label {
+    gap: 0.2rem;
+    color: #555;
+    font-size: 0.9rem;
+    margin-bottom: 0.5rem;
+
+    @media (max-width: 768px) {
+        font-size: 0.8rem;
+        margin-bottom: 0;
+    }
+}
+
+.filter-group-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    width: 100%;
+    max-width: calc(50% - 0.25rem);
+    margin: 0 auto;
+
+    @media (max-width: 768px) {
+        max-width: 100%;
+    }
+}
+
+select, button {
+    padding: 0.5rem;
+    border: 2px solid #ddd;
+    border-radius: 5px;
+    font-size: 1rem;
+    background: white;
+}
+
+select {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 448 512'%3E%3Cpath fill='%23666' d='M207.029 381.476L12.686 187.132c-9.373-9.373-9.373-24.569 0-33.941l22.667-22.667c9.357-9.357 24.522-9.375 33.901-.04L224 284.505l154.745-154.021c9.379-9.335 24.544-9.317 33.901.04l22.667 22.667c9.373 9.373 9.373 24.569 0 33.941L240.971 381.476c-9.373 9.372-24.569 9.372-33.942 0z'/%3E%3C/svg%3E");
+    background-position: right 0.5rem center;
+    background-repeat: no-repeat;
+    background-size: 0.75rem;
+    padding-right: 2.5rem;
+    background-color: white;
+    border: 2px solid #ddd;
+    border-radius: 5px;
+    font-size: 0.8rem;
+    color: #666;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+
+    &:hover {
+        background-color: #f5f5f5;
+    }
+}
+
+@media (max-width: 768px) {
+    select {
+        margin-right: 0;
+    }
+}
+
+button {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+button:hover {
+    transition: all 0.2s ease-in-out;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+button#updateButton {
+    @media (max-width: 768px) {
+        margin-top: 1rem;
+    }
+}
+
+.stats {
+    background: white;
+    padding: 1rem;
+    border-radius: 10px;
+    margin-bottom: 2rem;
+    text-align: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.loading {
+    text-align: center;
+    padding: 3rem;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.beer-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 1.5rem;
+    /* padding-top the same height as header */
+    padding-top: 280px;
+
+    @media (max-width: 768px) {
+        padding-top: 0;
+    }
+}
+
+.beer-card {
+    background: white;
+    border-radius: 10px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.beer-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.beer-name {
+    font-size: 1.3rem;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 0.5rem;
+
+    @media (max-width: 768px) {
+        font-size: 1rem;
+    }
+}
+
+.beer-type {
+    color: #666;
+    font-style: italic;
+    margin-bottom: 0.5rem;
+
+    @media (max-width: 768px) {
+        font-size: 0.8rem;
+    }
+}
+
+.beer-description {
+    color: #555;
+    line-height: 1.5;
+
+    @media (max-width: 768px) {
+        font-size: 0.8rem;
+    }
+}
+
+.beer-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 0.75rem;
+}
+
+.rating {
+    display: flex;
+    align-items: center;
+    gap: 0.2rem;
+    margin-top: 0.75rem;
+}
+
+.rating-text {
+    display: block;
+    margin-top: 0.35rem;
+    font-size: 0.9rem;
+    color: #999;
+
+    @media (max-width: 768px) {
+        font-size: 0.8rem;
+    }
+}
+
+.star {
+    font-size: 1.2rem;
+    color: #ffd700;
+    position: relative;
+    display: inline-block;
+
+    @media (max-width: 768px) {
+        font-size: 1rem;
+    }
+}
+
+.star.empty {
+    color: #ddd;
+}
+
+.star.partial {
+    background: linear-gradient(90deg, #ffd700 var(--fill), #ddd var(--fill));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.badge {
+    padding: 0.3rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: 500;
+
+    @media (max-width: 768px) {
+        font-size: 0.8rem;
+    }
+}
+
+.location-badge {
+    background: #e8f4f8;
+    color: #2c5282;
+    margin-right: 0.5rem;
+
+    @media (max-width: 768px) {
+        font-size: 0.8rem;
+    }
+}
+
+.on-tap {
+    background: #c6f6d5;
+    color: #22543d;
+
+    @media (max-width: 768px) {
+        font-size: 0.8rem;
+    }
+}
+
+.off-tap {
+    background: #fed7d7;
+    color: #742a2a;
+
+    @media (max-width: 768px) {
+        font-size: 0.8rem;
+    }
+}
+
+.error {
+    background: white;
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+@media (max-width: 768px) {
+    .beer-grid {
+        grid-template-columns: 1fr;
+    }
+    .filter-group {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    .header h1 {
+        font-size: 2rem;
+    }
+}
