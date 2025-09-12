@@ -41,9 +41,6 @@ The API will be available at `http://localhost:3000`
 
 ## 📋 API Endpoints
 
-### Father's Office
-`/api/fo`<br />
-***Example Response:***
 `/api/monkish`<br />
 ***Example Response:***
 ```json
