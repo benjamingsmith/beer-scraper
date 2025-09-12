@@ -1,0 +1,80 @@
+import React, { useState, useEffect } from 'react';
+import './Controls.css';
+
+const getLocations = async () => {
+  try {
+    const response = await fetch(`/api/get-locations`);
+    return response.json();
+  } catch(err) {
+    console.error('Error fetching locations:', err);
+    return [];
+  }
+};
+
+const Controls = ({ location, sortBy, onLocationChange, onSortChange }) => {
+  const [locations, setLocations] = useState([]);
+
+  useEffect(() => {
+    getLocations().then(setLocations);
+  }, []);
+
+  const locationOptions = [
+    { value: 'all', label: 'All Locations' },
+    { value: 'on-tap', label: 'On Tap Only' },
+    ...locations?.map(location => ({ 
+      value: location.label.replace(/\s+/g, '-'), 
+      label: location.label 
+    })) || []
+  ];
+
+  const sortOptions = [
+    { value: 'name', label: 'Name' },
+    { value: 'rating', label: 'Rating' },
+    { value: 'type', label: 'Type' },
+    { value: 'recently-added', label: 'Recently Added' }
+  ];
+
+  // Show location sort only for "all" and "on-tap"
+  const showLocationSort = location === 'all' || location === 'on-tap';
+  if (showLocationSort && !sortOptions.find(opt => opt.value === 'location')) {
+    sortOptions.push({ value: 'location', label: 'Location' });
+  }
+
+  return (
+    <div className="controls">
+      <div className="filter-group">
+        <div className="filter-group-item">
+          <label htmlFor="filter-location">Location:</label>
+          <select 
+            className="location-select"
+            id="filter-location"
+            value={location} 
+            onChange={(e) => onLocationChange(e.target.value)}
+          >
+            {locationOptions.map(option => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ))}
+          </select>
+        </div>
+        <div className="filter-group-item">
+          <label htmlFor="filter-sort">Sort by:</label>
+          <select 
+            id="filter-sort" 
+            value={sortBy} 
+            onChange={(e) => onSortChange(e.target.value)}
+          >
+            {sortOptions.map(option => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ))}
+          </select>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default Controls;

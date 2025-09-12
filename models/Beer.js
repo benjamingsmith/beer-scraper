@@ -79,6 +79,11 @@ beerSchema.statics.getBeerHistory = function(beerName) {
   return this.find({ normalizedName }).sort({ scrapedAt: -1 });
 };
 
+// Static method to get all beers recently added
+beerSchema.statics.getRecentlyAddedBeers = function() {
+  return this.find({ scrapedAt: { $gte: new Date(Date.now() - 1000 * 60 * 60 * 24) } }).sort({ scrapedAt: -1 });
+};
+
 // Static method to get all beers across all locations (including off tap)
 beerSchema.statics.getAllBeers = function(onTap) {
   // return all beers. If onTap is true, return only on tap beers. If it's not specified, return all beers.
