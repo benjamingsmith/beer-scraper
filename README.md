@@ -112,8 +112,6 @@ To modify or add new brewery scrapers:
 
 ## 📝 Future Enhancements
 
-- [ ] Untappd Ratings
-- [ ] El Segundo Brewing Company
 - [ ] Highland Park Brewery
 - [ ] Santa Monica Brew Works
 - [ ] Everywhere Beer
