@@ -16,7 +16,7 @@ const beerSchema = new mongoose.Schema({
   },
   type: {
     type: String,
-    required: true,
+    required: false,
     trim: true
   },
   description: {
@@ -31,7 +31,7 @@ const beerSchema = new mongoose.Schema({
   location: {
     type: String,
     required: true,
-    enum: ['fathers-office', 'monkish'],
+    enum: ['fathers-office', 'monkish', 'el-segundo'],
     index: true
   },
   onTap: {

@@ -1,6 +1,5 @@
 const axios = require('axios');
 const cheerio = require('cheerio');
-const { getUntappdRating } = require('../utils/untappd');
 
 const getFathersOffice = async () => {
   const url = 'https://www.fathersoffice.com/menus/santa-monica';
@@ -40,14 +39,6 @@ const getFathersOffice = async () => {
     }
   }
 
-  // Second pass: fetch ratings with rate limiting
-  console.log(`Fetching ratings for ${finalList.length} beers from Father's Office...`);
-  for (let i = 0; i < finalList.length; i++) {
-    if (finalList[i].name) {
-      console.log(`Getting rating for "${finalList[i].name}" (${i + 1}/${finalList.length})`);
-      finalList[i].rating = await getUntappdRating(finalList[i].name);
-    }
-  }
 
   return finalList;
 }

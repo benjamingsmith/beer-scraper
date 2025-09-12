@@ -1,7 +1,9 @@
 const mongoose = require('mongoose');
+const { getElSegundo } = require('../locations/ElSegundo');
 const { getFathersOffice } = require('../locations/FathersOffice');
 const { getMonkish } = require('../locations/Monkish');
 const Beers = require('../models/Beer');
+const { getUntappdRating } = require('../utils/untappd');
 const dotenv = require('dotenv');
 
 dotenv.config();
@@ -18,96 +20,67 @@ async function connectToDatabase() {
   }
 }
 
-async function updateFathersOfficeBeers() {
+async function updateLocationBeers(scraperFunction, locationName, displayName) {
   try {
-    console.log('Scraping Fathers Office...');
-    const beers = await getFathersOffice();
+    console.log(`Scraping ${displayName}...`);
+    const beers = await scraperFunction(); // Scraper no longer handles ratings
     
     // Mark all existing beers as off tap
-    await Beers.updateMany({ location: 'fathers-office' }, { onTap: false });
-    console.log('Marked existing Fathers Office beers as off tap');
+    await Beers.updateMany({ location: locationName }, { onTap: false });
+    console.log(`Marked existing ${displayName} beers as off tap`);
+    
+    const newBeers = [];
     
     // Save new data or update existing beers to onTap: true
     for (const beer of beers) {
-      if (beer.name && beer.type) {
+      if (beer.name) {
         const normalizedName = beer.name.toLowerCase().trim();
         
         // Try to find existing beer with same name and location
         const existingBeer = await Beers.findOne({
           normalizedName,
-          location: 'fathers-office'
+          location: locationName
         });
         
         if (existingBeer) {
-          // Update existing beer to be on tap and refresh data
+          // Update existing beer to be on tap and refresh data (keep existing rating)
           await Beers.updateOne(
             { _id: existingBeer._id },
             { 
               ...beer,
+              rating: existingBeer.rating, // Preserve existing rating
               onTap: true,
               scrapedAt: new Date()
             }
           );
         } else {
-          // Add new beer
-          await Beers.addBeer({
-            ...beer,
-            location: 'fathers-office',
-            onTap: true
-          });
+          // Track new beer for rating fetch
+          newBeers.push(beer);
         }
       }
     }
     
-    console.log(`Updated ${beers.length} Fathers Office beers`);
-  } catch (error) {
-    console.error('Error updating Fathers Office beers:', error);
-  }
-}
-
-async function updateMonkishBeers() {
-  try {
-    console.log('Scraping Monkish...');
-    const beers = await getMonkish();
-    
-    // Mark all existing beers as off tap
-    await Beers.updateMany({ location: 'monkish' }, { onTap: false });
-    console.log('Marked existing Monkish beers as off tap');
-    
-    // Save new data or update existing beers to onTap: true (getMonkish returns a flat array with location already set)
-    for (const beer of beers) {
-      if (beer.name && beer.type) {
-        const normalizedName = beer.name.toLowerCase().trim();
+    // Fetch ratings only for new beers
+    if (newBeers.length > 0) {
+      console.log(`Fetching ratings for ${newBeers.length} new ${displayName} beers...`);
+      
+      for (let i = 0; i < newBeers.length; i++) {
+        const beer = newBeers[i];
+        console.log(`Getting rating for "${beer.name}" (${i + 1}/${newBeers.length})`);
+        beer.rating = await getUntappdRating(beer.name);
         
-        // Try to find existing beer with same name and location
-        const existingBeer = await Beers.findOne({
-          normalizedName,
-          location: 'monkish'
+        // Add new beer with rating
+        await Beers.addBeer({
+          ...beer,
+          location: locationName,
+          onTap: true
         });
-        
-        if (existingBeer) {
-          // Update existing beer to be on tap and refresh data
-          await Beers.updateOne(
-            { _id: existingBeer._id },
-            { 
-              ...beer,
-              onTap: true,
-              scrapedAt: new Date()
-            }
-          );
-        } else {
-          // Add new beer
-          await Beers.addBeer({
-            ...beer,
-            onTap: true
-          });
-        }
       }
     }
     
-    console.log(`Updated ${beers.length} Monkish beers`);
+    console.log(`Updated ${beers.length} ${displayName} beers (${newBeers.length} new, ${beers.length - newBeers.length} existing)`);
   } catch (error) {
-    console.error('Error updating Monkish beers:', error);
+    console.error(`Error updating ${displayName} beers:`, error);
   }
 }
 
@@ -118,8 +91,9 @@ async function updateAllBeers() {
     await connectToDatabase();
     
     await Promise.all([
-      updateFathersOfficeBeers(),
-      updateMonkishBeers()
+      updateLocationBeers(getElSegundo, 'el-segundo', 'El Segundo'),
+      updateLocationBeers(getFathersOffice, 'fathers-office', 'Fathers Office'),
+      updateLocationBeers(getMonkish, 'monkish', 'Monkish')
     ]);
     
     console.log('Beer data update completed successfully');

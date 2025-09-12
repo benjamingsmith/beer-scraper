@@ -222,6 +222,7 @@
             <select id="location">
                 <option value="all">All Locations</option>
                 <option value="on-tap">On Tap Only</option>
+                <option value="el-segundo">El Segundo</option>
                 <option value="monkish">Monkish</option>
                 <option value="fathers-office">Father's Office</option>
             </select>
@@ -251,6 +252,7 @@
 
         function getLocationDisplayName(location) {
             switch(location) {
+                case 'el-segundo': return 'El Segundo';
                 case 'fathers-office': return 'Father\'s Office';
                 case 'monkish': return 'Monkish';
                 default: return location;
@@ -390,9 +392,43 @@
             await originalLoadBeers();
         };
 
+        // Function to update sort options based on location selection
+        function updateSortOptions() {
+            const locationSelect = document.getElementById('location');
+            const sortSelect = document.getElementById('sortBy');
+            const currentSort = sortSelect.value;
+            
+            // Get the location option element
+            let locationOption = sortSelect.querySelector('option[value="location"]');
+            
+            // Show location sort only for "all" and "on-tap"
+            if (locationSelect.value === 'all' || locationSelect.value === 'on-tap') {
+                // Add location option if it doesn't exist
+                if (!locationOption) {
+                    locationOption = document.createElement('option');
+                    locationOption.value = 'location';
+                    locationOption.textContent = 'Location';
+                    sortSelect.appendChild(locationOption);
+                }
+            } else {
+                // Remove location option if it exists
+                if (locationOption) {
+                    // If currently sorting by location, switch to name
+                    if (currentSort === 'location') {
+                        sortSelect.value = 'name';
+                    }
+                    locationOption.remove();
+                }
+            }
+        }
+
+        // Add event listener for location changes
+        document.getElementById('location').addEventListener('change', updateSortOptions);
+
         // Initialize page
         document.addEventListener('DOMContentLoaded', function() {
             initializeFromURL();
+            updateSortOptions(); // Update sort options on initial load
             loadBeers();
         });
     </script>
