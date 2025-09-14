@@ -258,11 +258,10 @@ button#updateButton {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
     gap: 1.5rem;
-    /* padding-top the same height as header */
-    padding-top: 280px;
+    padding: 280px 0 20px 0;
 
     @media (max-width: 768px) {
-        padding: 0 15px;
+        padding: 0 15px 20px 15px;
         gap: 1rem;
     }
 }
