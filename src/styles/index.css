@@ -7,6 +7,10 @@ body {
 
 .App {
     padding: 0 20px;
+
+    @media (max-width: 768px) {
+        padding: 0;
+    }
 }
 
 .header-container {
@@ -19,6 +23,7 @@ body {
     @media (max-width: 768px) {
         width: 100%;
         position: relative;
+        margin-top: 0;
     }
 
     &:before {
@@ -47,6 +52,7 @@ body {
 
     @media (max-width: 768px) {
         padding: 1rem;
+        border-radius: 0;
     }
 
     &::before {
@@ -131,6 +137,7 @@ body {
 
     @media (max-width: 768px) {
         padding: .8rem;
+        margin-bottom: 1rem;
     }
 
     .location-select {
@@ -251,11 +258,11 @@ button#updateButton {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
     gap: 1.5rem;
-    /* padding-top the same height as header */
-    padding-top: 280px;
+    padding: 280px 0 20px 0;
 
     @media (max-width: 768px) {
-        padding-top: 0;
+        padding: 0 15px 20px 15px;
+        gap: 1rem;
     }
 }
 
@@ -265,11 +272,11 @@ button#updateButton {
     padding: 1.5rem;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     transition: transform 0.2s, box-shadow 0.2s;
-}
 
-.beer-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    @media (max-width: 768px) {
+        padding: 1rem;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
 }
 
 .beer-name {
