@@ -85,4 +85,126 @@ const getUntappdRating = async (beerName) => {
   }
 }
 
-module.exports = { getUntappdRating };
+const rescanBeersWithoutRatings = async (Beer = null) => {
+  if (!Beer) {
+    throw new Error('Beer model is required for rescanBeersWithoutRatings');
+  }
+  try {
+    const beersWithoutRatings = await Beer.find({
+      $or: [
+        { rating: { $exists: false } },
+        { rating: null }
+      ]
+    });
+
+    console.log(`Found ${beersWithoutRatings.length} beers without ratings`);
+
+    let updatedCount = 0;
+
+    for (const beer of beersWithoutRatings) {
+      console.log(`Rescanning rating for: ${beer.name}`);
+      const rating = await getUntappdRating(beer.name);
+
+      if (rating !== null) {
+        await Beer.findByIdAndUpdate(beer._id, {
+          rating: rating,
+          updatedAt: new Date()
+        });
+        console.log(`Updated ${beer.name} with rating: ${rating}`);
+        updatedCount++;
+      } else {
+        console.log(`No rating found for: ${beer.name}`);
+      }
+    }
+
+    return {
+      processed: beersWithoutRatings.length,
+      updated: updatedCount
+    };
+  } catch (error) {
+    console.error('Error rescanning beers without ratings:', error.message);
+    throw error;
+  }
+};
+
+const rescanOutdatedBeers = async (Beer = null, daysOld = 10) => {
+  if (!Beer) {
+    throw new Error('Beer model is required for rescanOutdatedBeers');
+  }
+  try {
+    const cutoffDate = new Date(Date.now() - (daysOld * 24 * 60 * 60 * 1000));
+
+    const outdatedBeers = await Beer.find({
+      updatedAt: { $lt: cutoffDate }
+    });
+
+    console.log(`Found ${outdatedBeers.length} beers older than ${daysOld} days`);
+
+    let updatedCount = 0;
+
+    for (const beer of outdatedBeers) {
+      console.log(`Rescanning rating for outdated beer: ${beer.name}`);
+      const rating = await getUntappdRating(beer.name);
+
+      if (rating !== null) {
+        await Beer.findByIdAndUpdate(beer._id, {
+          rating: rating,
+          updatedAt: new Date()
+        });
+        console.log(`Updated ${beer.name} with rating: ${rating}`);
+        updatedCount++;
+      } else {
+        console.log(`No rating found for: ${beer.name}`);
+      }
+    }
+
+    return {
+      processed: outdatedBeers.length,
+      updated: updatedCount
+    };
+  } catch (error) {
+    console.error('Error rescanning outdated beers:', error.message);
+    throw error;
+  }
+};
+
+const rescanBeers = async (Beer = null, options = {}) => {
+  if (!Beer) {
+    throw new Error('Beer model is required for rescanBeers');
+  }
+  const {
+    includeWithoutRatings = true,
+    includeOutdated = true,
+    daysOld = 10
+  } = options;
+
+  const results = {
+    withoutRatings: { processed: 0, updated: 0 },
+    outdated: { processed: 0, updated: 0 }
+  };
+
+  try {
+    if (includeWithoutRatings) {
+      console.log('Starting rescan of beers without ratings...');
+      results.withoutRatings = await rescanBeersWithoutRatings(Beer);
+    }
+
+    if (includeOutdated) {
+      console.log(`Starting rescan of beers older than ${daysOld} days...`);
+      results.outdated = await rescanOutdatedBeers(Beer, daysOld);
+    }
+
+    console.log('Rescan complete:', results);
+    return results;
+  } catch (error) {
+    console.error('Error in rescan process:', error.message);
+    throw error;
+  }
+};
+
+module.exports = {
+  getUntappdRating,
+  rescanBeersWithoutRatings,
+  rescanOutdatedBeers,
+  rescanBeers
+};

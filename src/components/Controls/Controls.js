@@ -48,7 +48,7 @@ const Controls = ({ location, sortBy, onLocationChange, onSortChange }) => {
           <select 
             className="location-select"
             id="filter-location"
-            value={location} 
+            value={location || 'all'}
             onChange={(e) => onLocationChange(e.target.value)}
           >
             {locationOptions.map(option => (
@@ -62,7 +62,7 @@ const Controls = ({ location, sortBy, onLocationChange, onSortChange }) => {
           <label htmlFor="filter-sort">Sort by:</label>
           <select 
             id="filter-sort" 
-            value={sortBy} 
+            value={sortBy || 'name'} 
             onChange={(e) => onSortChange(e.target.value)}
           >
             {sortOptions.map(option => (
