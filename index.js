@@ -42,6 +42,7 @@ app.get('/api/:location', async(req, res) => {
   const { sortBy } = req.query;
   
   try {
+
     switch (location) {
       case 'all':
         beerList = await Beer.getAllBeers();
@@ -55,7 +56,12 @@ app.get('/api/:location', async(req, res) => {
       default:
         beerList = await Beer.getByLocation(location);
     }
-    
+
+    // If recently-added sorting, sort the beerList before formatting
+    if (sortBy === 'recently-added') {
+      beerList.sort((a, b) => new Date(b.scrapedAt) - new Date(a.scrapedAt));
+    }
+
     const formattedList = beerList.map(beer => ({
       name: beer.name,
       description: beer.description,
@@ -79,7 +85,7 @@ app.get('/api/:location', async(req, res) => {
         formattedList.sort((a, b) => (a.location || '').localeCompare(b.location || ''));
         break;
       case 'recently-added':
-        formattedList.sort((a, b) => (b.scrapedAt || 0) - (a.scrapedAt || 0));
+        // Already sorted before formatting, no need to sort again
         break;
       default:
         formattedList.sort((a, b) => a.name.localeCompare(b.name));

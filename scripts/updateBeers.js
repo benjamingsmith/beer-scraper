@@ -3,8 +3,27 @@ const { getElSegundo } = require('../locations/ElSegundo');
 const { getFathersOffice } = require('../locations/FathersOffice');
 const { getMonkish } = require('../locations/Monkish');
 const Beers = require('../models/Beer');
-const { getUntappdRating } = require('../utils/untappd');
+const { getUntappdRating, rescanBeersWithoutRatings, rescanOutdatedBeers } = require('../utils/untappd');
 const dotenv = require('dotenv');
+
+// Location configuration
+const LOCATIONS = [
+  {
+    scraperFunction: getElSegundo,
+    locationKey: 'el-segundo',
+    displayName: 'El Segundo'
+  },
+  {
+    scraperFunction: getFathersOffice,
+    locationKey: 'fathers-office',
+    displayName: 'Fathers Office'
+  },
+  {
+    scraperFunction: getMonkish,
+    locationKey: 'monkish',
+    displayName: 'Monkish'
+  }
+];
 
 dotenv.config();
 
@@ -86,16 +105,22 @@ async function updateLocationBeers(scraperFunction, locationName, displayName) {
 
 async function updateAllBeers() {
   console.log('Starting beer data update...');
-  
+
   try {
     await connectToDatabase();
-    
+
+    // Create location update promises
+    const locationUpdates = LOCATIONS.map(location =>
+      updateLocationBeers(location.scraperFunction, location.locationKey, location.displayName)
+    );
+
+    // Run all location updates and rescans in parallel
     await Promise.all([
-      updateLocationBeers(getElSegundo, 'el-segundo', 'El Segundo'),
-      updateLocationBeers(getFathersOffice, 'fathers-office', 'Fathers Office'),
-      updateLocationBeers(getMonkish, 'monkish', 'Monkish')
+      ...locationUpdates,
+      rescanBeersWithoutRatings(Beers),
+      rescanOutdatedBeers(Beers)
     ]);
-    
+
     console.log('Beer data update completed successfully');
   } catch (error) {
     console.error('Error during beer data update:', error);

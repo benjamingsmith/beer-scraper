@@ -15,16 +15,17 @@ const Controls = ({ location, sortBy, onLocationChange, onSortChange }) => {
   const [locations, setLocations] = useState([]);
 
   useEffect(() => {
-    getLocations().then(setLocations);
+    // get locations then transform them to include the label and the value
+    getLocations().then(locations => setLocations(locations.map(location => ({
+      value: location.label.replace(/\s+/g, '-'),
+      label: location.label
+    }))));
   }, []);
 
   const locationOptions = [
     { value: 'all', label: 'All Locations' },
     { value: 'on-tap', label: 'On Tap Only' },
-    ...locations?.map(location => ({ 
-      value: location.label.replace(/\s+/g, '-'), 
-      label: location.label 
-    })) || []
+    ...locations
   ];
 
   const sortOptions = [
@@ -48,7 +49,7 @@ const Controls = ({ location, sortBy, onLocationChange, onSortChange }) => {
           <select 
             className="location-select"
             id="filter-location"
-            value={location} 
+            value={location || 'all'}
             onChange={(e) => onLocationChange(e.target.value)}
           >
             {locationOptions.map(option => (
@@ -62,7 +63,7 @@ const Controls = ({ location, sortBy, onLocationChange, onSortChange }) => {
           <label htmlFor="filter-sort">Sort by:</label>
           <select 
             id="filter-sort" 
-            value={sortBy} 
+            value={sortBy || 'name'} 
             onChange={(e) => onSortChange(e.target.value)}
           >
             {sortOptions.map(option => (
