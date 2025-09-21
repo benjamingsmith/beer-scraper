@@ -15,16 +15,17 @@ const Controls = ({ location, sortBy, onLocationChange, onSortChange }) => {
   const [locations, setLocations] = useState([]);
 
   useEffect(() => {
-    getLocations().then(setLocations);
+    // get locations then transform them to include the label and the value
+    getLocations().then(locations => setLocations(locations.map(location => ({
+      value: location.label.replace(/\s+/g, '-'),
+      label: location.label
+    }))));
   }, []);
 
   const locationOptions = [
     { value: 'all', label: 'All Locations' },
     { value: 'on-tap', label: 'On Tap Only' },
-    ...locations?.map(location => ({ 
-      value: location.label.replace(/\s+/g, '-'), 
-      label: location.label 
-    })) || []
+    ...locations
   ];
 
   const sortOptions = [
